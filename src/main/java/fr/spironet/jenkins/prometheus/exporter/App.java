@@ -59,7 +59,7 @@ public class App {
             return ret.toString();
         });
         
-        logger.info("initialized with following parameters:");
+        logger.info("initialized with the following parameters:");
         logger.info("jenkins base url: " + jenkinsBaseUrl);
         logger.info("jenkins jobs to monitor:");
         for (String p : projectsToQuery) {
