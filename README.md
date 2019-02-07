@@ -2,7 +2,7 @@
 
 
 ```
-$ projectsToQuery=a/job/master,b,c jenkinsBaseUrl=https://example.com/jenkins \
+$ jenkinsJobs=a/job/master,b,c jenkinsBaseUrl=https://example.com/jenkins \
   jenkinsUsername=admin  jenkinsToken=... mvn clean package exec:java
 ```
 

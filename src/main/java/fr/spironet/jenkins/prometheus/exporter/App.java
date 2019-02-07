@@ -4,8 +4,11 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +32,8 @@ public class App {
 
     // Note: in case of multibranch, projects should be qualified with the branch name,
     // like "georchestra-cigalsace-ci/job/master"
-    private final List<String> projectsToQuery = Arrays.asList(
-            System.getenv("jenkinsJobs") == null ?
-                    "cigalsace,geopicardie,georhena,pigma,ppige".split(",") :
-                    System.getenv("jenkinsJobs").split(",")
-                  );
+
+    private final List<String> projectsToQuery;
 
     // See in Jenkins UI how to get these infos (my user / configure / show api token...)
     private final String username = System.getenv("jenkinsUsername") != null ?
@@ -47,6 +47,14 @@ public class App {
     private final int JENKINS_FAILED = 2;
 
     public App() {
+        if (System.getenv("jenkinsJobs") == null) {
+            projectsToQuery = Arrays.asList("cigalsace,geopicardie,georhena,pigma,ppige".split(","));
+        } else {
+            projectsToQuery = Pattern.compile(",").splitAsStream(System.getenv("jenkinsJobs"))
+                .map(s -> s.trim())
+                .collect(Collectors.toList());
+        }
+
         int port = Integer.getInteger("spark.port", 9103);
 
         port(port);
